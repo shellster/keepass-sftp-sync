@@ -17,11 +17,11 @@ namespace SftpSync
     /// <summary>
     /// Description of SftpWebResponse.
     /// </summary>
-    public class SftpWebResponse : WebResponse
+    public class ScpWebResponse : WebResponse
     {
         private Stream m_sResponse = null;
         private readonly string m_method = String.Empty;
-        private readonly SftpClient m_sftpClient = null;
+        private readonly ScpClient m_scpClient = null;
         private readonly Stream m_sReqStream = null;
 
         private long m_lSize = 0;
@@ -57,15 +57,15 @@ namespace SftpSync
         /// <param name="p_method">method, value: post or move</param>
         /// <param name="uriResponse"> uri to get response</param>
         /// <param name="p_InStream"> input stream, if is not null then upload, else download</param>
-        public SftpWebResponse(SftpClient p_sftpcl, string p_method, Uri uriResponse, Uri uriMoveTo, Stream p_InStream)
+        public ScpWebResponse(ScpClient p_sftpcl, string p_method, Uri uriResponse, Uri uriMoveTo, Stream p_InStream)
         {
             m_uriResponse = uriResponse;
             m_method = p_method;
-            m_sftpClient = p_sftpcl;
-            if (!m_sftpClient.IsConnected) m_sftpClient.Connect();
+            m_scpClient = p_sftpcl;
+            if (!m_scpClient.IsConnected) m_scpClient.Connect();
             m_sReqStream = p_InStream;
             m_uriMoveTo = uriMoveTo;
-            m_whc.Add("ServerInfo", m_sftpClient.ConnectionInfo.ServerVersion.ToString());
+            m_whc.Add("ServerInfo", m_scpClient.ConnectionInfo.ServerVersion.ToString());
             m_sResponse = doAction();
 
         }
@@ -73,32 +73,31 @@ namespace SftpSync
         {
             m_sResponse = new MemoryStream();
 
-            if (m_method == KeePassLib.Serialization.IOConnection.WrmDeleteFile && m_sftpClient.Exists(m_uriResponse.LocalPath))
+            if (m_method == KeePassLib.Serialization.IOConnection.WrmDeleteFile)
             {
-                 m_sftpClient.DeleteFile(m_uriResponse.LocalPath);
+                throw new ArgumentException("scp not support DELETE method");
+                
             }
             else if (m_method == KeePassLib.Serialization.IOConnection.WrmMoveFile)
             {
-                if (m_uriMoveTo == null) throw new ArgumentNullException("uriMoveTo");
-                m_sftpClient.RenameFile(m_uriResponse.LocalPath, m_uriMoveTo.LocalPath);
+                throw new ArgumentException("scp not support MOVE method");
             }
             else if (m_sReqStream == null && m_method != "POST")
             {
 
-                m_lSize = m_sftpClient.GetAttributes(m_uriResponse.LocalPath).Size;
-                m_sftpClient.DownloadFile(m_uriResponse.LocalPath, m_sResponse);
+              //  m_lSize = m_scpClient.GetAttributes(m_uriResponse.LocalPath).Size;
+                m_scpClient.Download(m_uriResponse.LocalPath, m_sResponse);
                 // Debug.Assert(m_sResponse.Length != m_lSize);				
             }
             else if (m_method == "POST")
             {
                 if (m_sReqStream == null) throw new ArgumentNullException("m_sReqStream");
                 m_lSize = 0;
-              
-                m_sftpClient.UploadFile(m_sReqStream, m_uriResponse.LocalPath);
-                var s = m_sftpClient.GetAttributes(m_uriResponse.LocalPath).Size;
-                //Debug.Assert(m_sReqStream.Length != s);
 
-            } else
+                m_scpClient.Upload (m_sReqStream, m_uriResponse.LocalPath);             
+
+            }
+            else
             {
                 throw new Exception("mode not support");
             }

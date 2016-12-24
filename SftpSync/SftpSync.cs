@@ -24,22 +24,18 @@ namespace SftpSync
 		private IPluginHost m_host = null;
         private static bool m_bPropRegistered = false;
         private SftpWebRequestCreator m_sftpCr = null;
-        private static readonly PwUuid EcasAppLoadPost = new PwUuid(new byte[] {
-            0xD8, 0xF3, 0x1E, 0xE9, 0xCC, 0x69, 0x48, 0x1B,
-            0x89, 0xC5, 0xFC, 0xE2, 0xEA, 0x4B, 0x6A, 0x97
-        });
-   //     private static bool m_bMainFormLoading = true;
+       
+   
 
         public override bool Initialize(IPluginHost host)
 		{
 			m_host = host;
-      /*      m_host.TriggerSystem.RaisingEvent += this.OnEcasEvent;*/
+      
             m_sftpCr = new  SftpWebRequestCreator();
             m_sftpCr.Register();
             RegisterIocProperties();
 
-        //		var SshClientc = new SshClient("asdf",1234,"asdf","asdf");
-        //				SshClientc.Connect();
+    
 
             return true;
 			
@@ -48,14 +44,7 @@ namespace SftpSync
 {
             if (m_host != null)
             {
-                // m_tsOptions.Click -= this.OnOptions;
-                // m_host.MainWindow.ToolsMenu.DropDownItems.Remove(m_tsOptions);
-                // m_tsOptions = null;
-                // m_host.MainWindow.ToolsMenu.DropDownItems.Remove(m_tsSep);
-                // m_tsSep = null;
-
-      /*          m_host.TriggerSystem.RaisingEvent -= this.OnEcasEvent;*/
-                m_host = null;
+                               m_host = null;
             }
         }
         private static void RegisterIocProperties()
@@ -63,9 +52,9 @@ namespace SftpSync
 			if(m_bPropRegistered) return;
 			m_bPropRegistered = true;
 
-			string[] vScpSftp = new string[] {/* "SCP",*/ "SFTP" };
+			string[] vScpSftp = new string[] { "SCP", "SFTP" };
       //  string[] vFtps = new string[] { "FTPS" };
-        string[] vScpSftpFtps = new string[] {/* "SCP",*/ "SFTP", /*"FTPS"*/ };
+        string[] vScpSftpFtps = new string[] { "SCP", "SFTP", /*"FTPS"*/ };
         string[] vWinScp = new string[] { "Sharp SSH ( SFTP)" };
 
         IocPropertyInfoPool.Add(new IocPropertyInfo("PrivateKey",

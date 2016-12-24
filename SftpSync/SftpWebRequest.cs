@@ -21,7 +21,7 @@ namespace SftpSync
 	/// </summary>
 	public class SftpWebRequest: WebRequest, IHasIocProperties
     {
-		private SftpClient m_SftpClient = null;
+		
 		private readonly Uri m_uri;
         private List<byte> m_reqBody = new List<byte>();
 		public override Uri RequestUri {
@@ -121,20 +121,34 @@ namespace SftpSync
 			string strUser = ((cred != null) ? cred.UserName : null);
 			string strPassword = ((cred != null) ? cred.Password : null);
 
-            if (m_SftpClient == null)
-            {
-                m_SftpClient = m_uri.Port == -1 ? new SftpClient(m_uri.Host, strUser, strPassword) : new SftpClient(m_uri.Host, m_uri.Port, strUser, strPassword);
-                m_SftpClient.Connect();
-            }
+            BaseClient m_Client = null;
+
+            int l_port = m_uri.Port == -1 ? 22 : m_uri.Port;
+         
 
             Uri uriTo = null;
             if (m_strMethod == KeePassLib.Serialization.IOConnection.WrmMoveFile) uriTo = new Uri(m_whcHeaders.Get(
                         IOConnection.WrhMoveFileTo));
             MemoryStream reqStream = null;
-            if (m_reqBody.Count > 0)  reqStream = new MemoryStream(m_reqBody.ToArray());
+            if (m_reqBody.Count > 0) reqStream = new MemoryStream(m_reqBody.ToArray());
 
-            return  new SftpWebResponse(m_SftpClient, m_strMethod, m_uri, uriTo, reqStream);
 
+            if (m_uri.Scheme == "sftp")
+            {
+                m_Client = new SftpClient(m_uri.Host, l_port, strUser, strPassword);
+                return new SftpWebResponse((SftpClient)m_Client, m_strMethod, m_uri, uriTo, reqStream);
+            }
+            else if (m_uri.Scheme == "scp")
+            {
+                m_Client = new ScpClient(m_uri.Host, l_port, strUser, strPassword);
+                return new ScpWebResponse((ScpClient)m_Client, m_strMethod, m_uri, uriTo, reqStream);
+
+            }
+            else
+            {
+
+                return null;
+            }
 
         }
 
