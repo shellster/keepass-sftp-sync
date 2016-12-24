@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 5.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SftpSync", "SftpSync\SftpSync.csproj", "{FD5007CB-C068-4557-A162-87381E6F62AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD5007CB-C068-4557-A162-87381E6F62AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD5007CB-C068-4557-A162-87381E6F62AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD5007CB-C068-4557-A162-87381E6F62AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD5007CB-C068-4557-A162-87381E6F62AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = None
+		$1.ResourceNamePolicy = FileFormatDefault
+		$0.NameConventionPolicy = $2
+		$2.Rules = $3
+		$3.NamingRule = $4
+		$4.Name = Type Parameters
+		$4.AffectedEntity = TypeParameter
+		$4.VisibilityMask = VisibilityMask
+		$4.NamingStyle = PascalCase
+		$4.IncludeInstanceMembers = True
+		$4.IncludeStaticEntities = True
+		$4.RequiredPrefixes = $5
+		$5.String = T
+		$4.RequiredSuffixes = $6
+		$6.String = Exception
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>bin\Debug\KeePass.exe</StartProgram>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartProgram>C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug\KeePass.exe</StartProgram>
+    <StartWorkingDirectory>C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug\</StartWorkingDirectory>
+    <StartArguments>C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug\test.kdbx -pw:test -cfg-local:C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectView>ShowAllFiles</ProjectView>
+  </PropertyGroup>
+</Project>

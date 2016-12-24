@@ -1,0 +1,9 @@
+﻿<Properties StartupConfiguration="{FD5007CB-C068-4557-A162-87381E6F62AB}|Default">
+  <MonoDevelop.Ide.ItemProperties.SftpSync PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench />
+</Properties>

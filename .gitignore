@@ -1,0 +1,6 @@
+SftpSync/bin/**
+SftpSync/bin/**/
+SftpSync/obj/**
+SftpSync/obj/**/
+.idea
+.vs
