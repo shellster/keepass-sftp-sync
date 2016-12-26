@@ -5,9 +5,9 @@
     <StartProgram>bin\Debug\KeePass.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartProgram>C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug\KeePass.exe</StartProgram>
-    <StartWorkingDirectory>C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug\</StartWorkingDirectory>
-    <StartArguments>C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug\test.kdbx -pw:test -cfg-local:C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug</StartArguments>
+    <StartProgram>C:\Users\Vitaly\c#\keepass_plugin\git\keepass-sftp-sync-code\SftpSync\bin\Debug\KeePass.exe</StartProgram>
+    <StartWorkingDirectory>C:\Users\Vitaly\c#\keepass_plugin\git\keepass-sftp-sync-code\SftpSync\bin\Debug</StartWorkingDirectory>
+    <StartArguments>C:\Users\Vitaly\c#\keepass_plugin\git\keepass-sftp-sync-code\SftpSync\bin\Debug\test.kdbx -pw:test -cfg-local:C:\Users\Vitaly\c#\keepass_plugin\SftpSync\SftpSync\bin\Debug</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>

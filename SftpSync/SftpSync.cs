@@ -54,8 +54,8 @@ namespace SftpSync
 
 			string[] vScpSftp = new string[] { "SCP", "SFTP" };
       //  string[] vFtps = new string[] { "FTPS" };
-        string[] vScpSftpFtps = new string[] { "SCP", "SFTP", /*"FTPS"*/ };
-        string[] vWinScp = new string[] { "Sharp SSH ( SFTP)" };
+     //   string[] vScpSftpFtps = new string[] { "SCP", "SFTP"};
+      //  string[] vWinScp = new string[] { "Sharp SSH ( SFTP)" };
 
         IocPropertyInfoPool.Add(new IocPropertyInfo("PrivateKey",
 				typeof(string), "SSH private key path", vScpSftp));
@@ -71,15 +71,9 @@ namespace SftpSync
 
 			IocPropertyInfoPool.Add(new IocPropertyInfo("Passphrase",
 				typeof(string), "Passphrase for encrypted private keys and client certificates",
-				vScpSftpFtps));
+                vScpSftp));
 
-		/*	IocPropertyInfoPool.Add(new IocPropertyInfo(IopProps.WinScpRawSettings,
-				typeof(string), "Raw settings", vWinScp));*/
 		}
-  /*  private void OnEcasEvent(object sender, EcasRaisingEventArgs e)
-    {
-        if (e.Event.Type.Equals(EcasAppLoadPost))
-            m_bMainFormLoading = false;
-    }*/
+
 }
 }

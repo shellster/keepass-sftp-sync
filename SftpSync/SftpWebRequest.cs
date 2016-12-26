@@ -13,6 +13,7 @@ using System.Net;
 using KeePassLib.Serialization;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SftpSync
 {
@@ -24,6 +25,7 @@ namespace SftpSync
 		
 		private readonly Uri m_uri;
         private List<byte> m_reqBody = new List<byte>();
+        private byte[] m_fingerprint;
 		public override Uri RequestUri {
 			get {
 				return m_uri;
@@ -132,26 +134,44 @@ namespace SftpSync
             MemoryStream reqStream = null;
             if (m_reqBody.Count > 0) reqStream = new MemoryStream(m_reqBody.ToArray());
 
+            
 
-            if (m_uri.Scheme == "sftp")
+
+             m_Client = new SftpClient(m_uri.Host, l_port, strUser, strPassword);
+
+            if (m_props.Get("HostKey") != null)
             {
-                m_Client = new SftpClient(m_uri.Host, l_port, strUser, strPassword);
-                return new SftpWebResponse((SftpClient)m_Client, m_strMethod, m_uri, uriTo, reqStream);
-            }
-            else if (m_uri.Scheme == "scp")
-            {
-                m_Client = new ScpClient(m_uri.Host, l_port, strUser, strPassword);
-                return new ScpWebResponse((ScpClient)m_Client, m_strMethod, m_uri, uriTo, reqStream);
+                string[] v_ssh_dss_parts = m_props.Get("HostKey").Split(':');
+                if (v_ssh_dss_parts.Length != 16) throw new Exception("Input incorrect host fingerprint. Check it. Must bu like: 12:34:56:78:90:ab:cd:ef:12:34:56:78:90:ab:cd:ef");
+                List<byte> v_ssh_dss_parts_b = new List<byte>();
+                foreach (string str in v_ssh_dss_parts)
+                    {
+                    try
+                    {
+                        v_ssh_dss_parts_b.Add(byte.Parse(str, System.Globalization.NumberStyles.AllowHexSpecifier));
+                    } 
+                    catch (Exception)
+                    {
+                        throw new Exception("Input incorrect host fingerprint. Check it. Must bu like: 12:34:56:78:90:ab:cd:ef:12:34:56:78:90:ab:cd:ef");
+
+                    }
+                }
+                m_fingerprint = v_ssh_dss_parts_b.ToArray();
+                m_Client.HostKeyReceived += M_Client_HostKeyReceived;
 
             }
-            else
-            {
+            
 
-                return null;
-            }
+                return new SftpWebResponse(m_Client, m_strMethod, m_uri, uriTo, reqStream);
+        
+            
+            
 
         }
 
-		
-	}
+        private void M_Client_HostKeyReceived(object sender, Renci.SshNet.Common.HostKeyEventArgs e)
+        {
+            e.CanTrust = e.FingerPrint.SequenceEqual(m_fingerprint) ?true: false;
+        }
+    }
 }
