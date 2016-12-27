@@ -5,3 +5,4 @@ SftpSync/obj/**/
 .idea
 .vs
 /**/*.bak
+/*.plgx
