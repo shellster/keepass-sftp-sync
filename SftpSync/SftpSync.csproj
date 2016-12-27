@@ -54,6 +54,7 @@
     <LangVersion>4</LangVersion>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Optimize>false</Optimize>
+    <OutputPath>..\..\..\..\WORK\PORTABLE_SOFT\KeePass\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <LangVersion>4</LangVersion>

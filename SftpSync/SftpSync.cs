@@ -53,26 +53,19 @@ namespace SftpSync
 			m_bPropRegistered = true;
 
 			string[] vScpSftp = new string[] { "SCP", "SFTP" };
-      //  string[] vFtps = new string[] { "FTPS" };
-     //   string[] vScpSftpFtps = new string[] { "SCP", "SFTP"};
-      //  string[] vWinScp = new string[] { "Sharp SSH ( SFTP)" };
+       
 
-        IocPropertyInfoPool.Add(new IocPropertyInfo("PrivateKey",
+
+            IocPropertyInfoPool.Add(new IocPropertyInfo("HostKey",
+                            typeof(string), "Fingerprint of expected SSH host key", vScpSftp));
+
+            /* later...
+            IocPropertyInfoPool.Add(new IocPropertyInfo("PrivateKey",
 				typeof(string), "SSH private key path", vScpSftp));
-			IocPropertyInfoPool.Add(new IocPropertyInfo("HostKey",
-				typeof(string), "Fingerprint of expected SSH host key", vScpSftp));
-
-			/*IocPropertyInfoPool.Add(new IocPropertyInfo("TlsSslImplicit",
-				typeof(bool), "Implicit TLS/SSL", vFtps));
-			IocPropertyInfoPool.Add(new IocPropertyInfo("TlsSslExplicit",
-				typeof(bool), "Explicit TLS/SSL", vFtps));*/
-			/*IocPropertyInfoPool.Add(new IocPropertyInfo("Certificate",
-				typeof(string), "Fingerprint of expected TLS/SSL certificate", vFtps));*/
-
 			IocPropertyInfoPool.Add(new IocPropertyInfo("Passphrase",
 				typeof(string), "Passphrase for encrypted private keys and client certificates",
                 vScpSftp));
-
+                */
 		}
 
 }

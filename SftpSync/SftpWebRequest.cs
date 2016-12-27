@@ -14,6 +14,7 @@ using KeePassLib.Serialization;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using Renci.SshNet.Common;
 
 namespace SftpSync
 {
@@ -114,19 +115,19 @@ namespace SftpSync
             m_reqBody.Clear();
             return new CopyMemoryStream(m_reqBody);
 		}
-		//private WebResponse m_webresp = null;
-		public override WebResponse GetResponse()
-		{
-			//if(m_wr != null) return m_wr;
-			
-			NetworkCredential cred = (m_cred as NetworkCredential);
-			string strUser = ((cred != null) ? cred.UserName : null);
-			string strPassword = ((cred != null) ? cred.Password : null);
+        //private WebResponse m_webresp = null;
+        public override WebResponse GetResponse()
+        {
+            //if(m_wr != null) return m_wr;
+
+            NetworkCredential cred = (m_cred as NetworkCredential);
+            string strUser = ((cred != null) ? cred.UserName : null);
+            string strPassword = ((cred != null) ? cred.Password : null);
 
             BaseClient m_Client = null;
 
             int l_port = m_uri.Port == -1 ? 22 : m_uri.Port;
-         
+
 
             Uri uriTo = null;
             if (m_strMethod == KeePassLib.Serialization.IOConnection.WrmMoveFile) uriTo = new Uri(m_whcHeaders.Get(
@@ -134,10 +135,19 @@ namespace SftpSync
             MemoryStream reqStream = null;
             if (m_reqBody.Count > 0) reqStream = new MemoryStream(m_reqBody.ToArray());
 
+
+
+            KeyboardInteractiveAuthenticationMethod v_kauth = new KeyboardInteractiveAuthenticationMethod(strUser);
+            v_kauth.AuthenticationPrompt += SftpWebRequest_AuthenticationPrompt;
+            PasswordAuthenticationMethod v_pauth = new PasswordAuthenticationMethod(strUser, strPassword);
+
+            ConnectionInfo n_con_info = new ConnectionInfo(m_uri.Host, l_port, strUser, v_pauth, v_kauth);
+            m_Client = new SftpClient(n_con_info);
+
             
 
-
-             m_Client = new SftpClient(m_uri.Host, l_port, strUser, strPassword);
+           
+        
 
             if (m_props.Get("HostKey") != null)
             {
@@ -167,6 +177,19 @@ namespace SftpSync
             
             
 
+        }
+
+      
+
+        private void SftpWebRequest_AuthenticationPrompt(object sender, Renci.SshNet.Common.AuthenticationPromptEventArgs e)
+        {
+            foreach (AuthenticationPrompt prompt in e.Prompts)
+            {
+                if (prompt.Request.IndexOf("Password:", StringComparison.InvariantCultureIgnoreCase) != -1)
+                {
+                    prompt.Response = (m_cred as NetworkCredential).Password;
+                }
+            }
         }
 
         private void M_Client_HostKeyReceived(object sender, Renci.SshNet.Common.HostKeyEventArgs e)
