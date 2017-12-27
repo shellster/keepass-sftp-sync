@@ -29,15 +29,19 @@ namespace SftpSync
 
         public override bool Initialize(IPluginHost host)
 		{
+			//try{
 			m_host = host;
       
             m_sftpCr = new  SftpWebRequestCreator();
             m_sftpCr.Register();
-            RegisterIocProperties();
-
-    
+            RegisterIocProperties();   
 
             return true;
+			//}
+			// catch (Exception e) 
+		//	{
+		//		MessageBox.Show(e.ToString(), "Plugin initialize error:", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		//	}
 			
 		}
 		public override void Terminate()
