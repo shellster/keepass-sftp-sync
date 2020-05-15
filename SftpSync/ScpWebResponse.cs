@@ -1,12 +1,4 @@
-﻿/*
- * Created by SharpDevelop.
- * User: Vitaly
- * Date: 20.12.2016
- * Time: 23:30
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-using System;
+﻿using System;
 using Renci.SshNet;
 using System.Net;
 using System.IO;
@@ -23,8 +15,12 @@ namespace SftpSync
         private readonly string m_method = String.Empty;
         private readonly ScpClient m_scpClient = null;
         private readonly Stream m_sReqStream = null;
-
+        private Uri m_uriResponse;
+        private Uri m_uriMoveTo;
         private long m_lSize = 0;
+
+        private WebHeaderCollection m_whc = new WebHeaderCollection();
+
         public override long ContentLength
         {
             get { return m_lSize; }
@@ -37,14 +33,11 @@ namespace SftpSync
             set { throw new InvalidOperationException(); }
         }
 
-        private Uri m_uriResponse;
-        private Uri m_uriMoveTo;
         public override Uri ResponseUri
         {
             get { return m_uriResponse; }
         }
 
-        private WebHeaderCollection m_whc = new WebHeaderCollection();
         public override WebHeaderCollection Headers
         {
             get { return m_whc; }
@@ -75,8 +68,7 @@ namespace SftpSync
 
             if (m_method == KeePassLib.Serialization.IOConnection.WrmDeleteFile)
             {
-                throw new ArgumentException("scp not support DELETE method");
-                
+                throw new ArgumentException("scp not support DELETE method"); 
             }
             else if (m_method == KeePassLib.Serialization.IOConnection.WrmMoveFile)
             {
@@ -84,18 +76,14 @@ namespace SftpSync
             }
             else if (m_sReqStream == null && m_method != "POST")
             {
-
-              //  m_lSize = m_scpClient.GetAttributes(m_uriResponse.LocalPath).Size;
-                m_scpClient.Download(m_uriResponse.LocalPath, m_sResponse);
-                // Debug.Assert(m_sResponse.Length != m_lSize);				
+                m_scpClient.Download(m_uriResponse.LocalPath, m_sResponse);	
             }
             else if (m_method == "POST")
             {
                 if (m_sReqStream == null) throw new ArgumentNullException("m_sReqStream");
                 m_lSize = 0;
 
-                m_scpClient.Upload (m_sReqStream, m_uriResponse.LocalPath);             
-
+                m_scpClient.Upload (m_sReqStream, m_uriResponse.LocalPath);
             }
             else
             {
@@ -106,13 +94,14 @@ namespace SftpSync
             File.WriteAllBytes(strTempFile, ((MemoryStream)m_sResponse).ToArray());
 
             return m_sResponse.Length > 0 ? (Stream)File.Open(strTempFile, FileMode.Open) : (Stream)m_sResponse;
-
         }
+
         public override Stream GetResponseStream()
         {
 
             return m_sResponse ?? doAction();
         }
+
         public override void Close()
         {
             if (m_sResponse != null) { m_sResponse.Close(); m_sResponse = null; }

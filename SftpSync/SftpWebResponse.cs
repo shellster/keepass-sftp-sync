@@ -1,12 +1,4 @@
-﻿/*
- * Created by SharpDevelop.
- * User: Vitaly
- * Date: 20.12.2016
- * Time: 23:30
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-using System;
+﻿using System;
 using Renci.SshNet;
 using System.Net;
 using System.IO;
@@ -14,9 +6,6 @@ using System.Diagnostics;
 
 namespace SftpSync
 {
-    /// <summary>
-    /// Description of SftpWebResponse.
-    /// </summary>
     public class SftpWebResponse : WebResponse
     {
         private Stream m_sResponse = null;
@@ -39,12 +28,14 @@ namespace SftpSync
 
         private Uri m_uriResponse;
         private Uri m_uriMoveTo;
+
         public override Uri ResponseUri
         {
             get { return m_uriResponse; }
         }
 
         private WebHeaderCollection m_whc = new WebHeaderCollection();
+
         public override WebHeaderCollection Headers
         {
             get { return m_whc; }
@@ -69,6 +60,7 @@ namespace SftpSync
             m_sResponse = doAction();
 
         }
+
         private Stream doAction()
         {
             m_sResponse = new MemoryStream();
@@ -115,13 +107,13 @@ namespace SftpSync
             File.WriteAllBytes(strTempFile, ((MemoryStream)m_sResponse).ToArray());
 
             return m_sResponse.Length > 0 ? (Stream)File.Open(strTempFile, FileMode.Open) : (Stream)m_sResponse;
-
         }
+
         public override Stream GetResponseStream()
         {
-
             return m_sResponse ?? doAction();
         }
+
         public override void Close()
         {
             if (m_sResponse != null) { m_sResponse.Close(); m_sResponse = null; }
