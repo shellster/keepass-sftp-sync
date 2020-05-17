@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-using KeePass.Plugins;
+﻿using KeePass.Plugins;
 using KeePassLib.Serialization;
-using KeePass.Ecas;
 using KeePassLib;
 
 namespace SftpSync
@@ -13,6 +9,11 @@ namespace SftpSync
 		private IPluginHost m_host = null;
         private static bool m_bPropRegistered = false;
         private SftpWebRequestCreator m_sftpCr = null;
+
+        public override string UpdateUrl
+        {
+            get { return "https://raw.githubusercontent.com/shellster/keepass-sftp-sync/master/version.txt"; }
+        }
 
         public override bool Initialize(IPluginHost host)
 		{
@@ -40,6 +41,9 @@ namespace SftpSync
 
             IocPropertyInfoPool.Add(new IocPropertyInfo("HostKey",
                             typeof(string), "Fingerprint of expected SSH host key", vScpSftp));
-		}
+
+            IocPropertyInfoPool.Add(new IocPropertyInfo("SSHTimeout",
+                            typeof(string), "SSH Connection Timeout [ms]", vScpSftp));
+        }
     }
 }

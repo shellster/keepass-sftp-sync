@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
-using Renci.SshNet;
 using KeePassLib.Serialization;
 using System.Windows.Forms;
 
@@ -19,7 +17,7 @@ namespace SftpSync
                 foreach (string strPrefix in m_vSupportedSchemes)
                     WebRequest.RegisterPrefix(strPrefix, this);
 
-                // scp not support operation move and delete. Then sync via scp, do withot transaction (direct write to target remote file)
+                // scp not support operation move and delete. Then sync via scp, do without transaction (direct write to target remote file)
                 FileTransactionEx.Configure("scp", false);
             } catch (Exception e)
             {

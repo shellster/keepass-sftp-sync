@@ -12,6 +12,8 @@ I hope to continue development of this addon, as the original developer has not 
 
 Change Log
 --------------
+16.05.2020	2.1: Added configurable SSH connection timeout under advanced options, added update checking capabilities.
+
 14.05.2020: 2.0: Fixed some spelling errors, updated SSHNet Lib version, added extended timeout for connections.
 
 24.12.2016:	1.0: Support sftp protocol, for sync keepass db

@@ -1,3 +1,3 @@
 :
-SftpSync:2.01
+SftpSync:2.1
 :

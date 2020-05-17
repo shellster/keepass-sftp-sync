@@ -143,9 +143,16 @@ namespace SftpSync
             ConnectionInfo n_con_info = new ConnectionInfo(m_uri.Host, l_port, strUser, v_pauth, v_kauth);
             m_Client = new SftpClient(n_con_info);
 
-            //Add 2 minute timeout to allow connecting via very slow internet connections.
-            m_Client.ConnectionInfo.Timeout = new TimeSpan(0, 2, 0);
+            //Set timeout to reasonable setting of 30 seconds for default.
+            int connectionTimeout = 30000;
+
+            if (m_props.Get("SSHTimeout") != null)
+            {
+                int.TryParse(m_props.Get("SSHTimeout"), out connectionTimeout);
+            }
             
+            m_Client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, connectionTimeout);
+
             if (m_props.Get("HostKey") != null)
             {
                 string[] v_ssh_dss_parts = m_props.Get("HostKey").Split(':');

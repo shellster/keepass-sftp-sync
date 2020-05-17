@@ -2,7 +2,6 @@
 using Renci.SshNet;
 using System.Net;
 using System.IO;
-using System.Diagnostics;
 
 namespace SftpSync
 {
