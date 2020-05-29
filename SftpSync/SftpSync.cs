@@ -44,6 +44,9 @@ namespace SftpSync
 
             IocPropertyInfoPool.Add(new IocPropertyInfo("SSHTimeout",
                             typeof(string), "SSH Connection Timeout [ms]", vScpSftp));
+
+            IocPropertyInfoPool.Add(new IocPropertyInfo("SSHKey",
+                            typeof(string), "SSH Private Key", vScpSftp));
         }
     }
 }

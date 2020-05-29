@@ -7,6 +7,7 @@ using KeePassLib.Serialization;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Renci.SshNet.Common;
+using System.Text;
 
 namespace SftpSync
 {
@@ -136,11 +137,30 @@ namespace SftpSync
             MemoryStream reqStream = null;
             if (m_reqBody.Count > 0) reqStream = new MemoryStream(m_reqBody.ToArray());
 
-            KeyboardInteractiveAuthenticationMethod v_kauth = new KeyboardInteractiveAuthenticationMethod(strUser);
-            v_kauth.AuthenticationPrompt += SftpWebRequest_AuthenticationPrompt;
-            PasswordAuthenticationMethod v_pauth = new PasswordAuthenticationMethod(strUser, strPassword);
+            ConnectionInfo n_con_info;
 
-            ConnectionInfo n_con_info = new ConnectionInfo(m_uri.Host, l_port, strUser, v_pauth, v_kauth);
+            if (m_props.Get("SSHKey") != null)
+            {
+                string keyString = m_props.Get("SSHKey").Replace("\\n", "\n");
+                MemoryStream keyStream = new MemoryStream(Encoding.ASCII.GetBytes(keyString));
+                PrivateKeyFile v_keyauth;
+
+                if (strPassword == null)
+                    v_keyauth = new PrivateKeyFile(keyStream);
+                else
+                    v_keyauth = new PrivateKeyFile(keyStream, strPassword);
+
+                n_con_info = new PrivateKeyConnectionInfo(m_uri.Host, l_port, strUser, v_keyauth);
+            }
+            else
+            {
+                KeyboardInteractiveAuthenticationMethod v_kauth = new KeyboardInteractiveAuthenticationMethod(strUser);
+                v_kauth.AuthenticationPrompt += SftpWebRequest_AuthenticationPrompt;
+
+                PasswordAuthenticationMethod v_pauth = new PasswordAuthenticationMethod(strUser, strPassword);
+                n_con_info = new ConnectionInfo(m_uri.Host, l_port, strUser, v_pauth, v_kauth);
+            }
+
             m_Client = new SftpClient(n_con_info);
 
             //Set timeout to reasonable setting of 30 seconds for default.
