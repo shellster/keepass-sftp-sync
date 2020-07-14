@@ -14,4 +14,7 @@
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
+  <PropertyGroup>
+    <ReferencePath>$(MSBuildProjectDirectory)\..\..\bins\KeePass\</ReferencePath>
+  </PropertyGroup>
 </Project>

@@ -7,34 +7,37 @@ using KeePassLib.Serialization;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Renci.SshNet.Common;
+using Renci.SshNet.Pageant;
 using System.Text;
 
 namespace SftpSync
 {
-	public class SftpWebRequest: WebRequest, IHasIocProperties
+    public class SftpWebRequest : WebRequest, IHasIocProperties
     {
-		
-		private readonly Uri m_uri;
+
+        private readonly Uri m_uri;
         private List<byte> m_reqBody = new List<byte>();
         private byte[] m_fingerprint;
 
-		public override Uri RequestUri {
-			get {
-				return m_uri;
-			}
-		}
+        public override Uri RequestUri
+        {
+            get
+            {
+                return m_uri;
+            }
+        }
 
-		private string m_strMethod = string.Empty;
+        private string m_strMethod = string.Empty;
 
-		public override string Method
-		{
-			get { return m_strMethod; }
-			set
-			{
-				if(value == null) throw new ArgumentNullException("value");
-				m_strMethod = value;
-			}
-		}
+        public override string Method
+        {
+            get { return m_strMethod; }
+            set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+                m_strMethod = value;
+            }
+        }
 
         private WebHeaderCollection m_whcHeaders = new WebHeaderCollection();
 
@@ -50,75 +53,75 @@ namespace SftpSync
 
         private long m_lContentLength = 0;
 
-		public override long ContentLength
-		{
-			get { return m_lContentLength; }
-			set
-			{
-				if(value < 0) throw new ArgumentOutOfRangeException("value");
-				m_lContentLength = value;
-			}
-		}
+        public override long ContentLength
+        {
+            get { return m_lContentLength; }
+            set
+            {
+                if (value < 0) throw new ArgumentOutOfRangeException("value");
+                m_lContentLength = value;
+            }
+        }
 
-		private string m_strContentType = string.Empty;
+        private string m_strContentType = string.Empty;
 
-		public override string ContentType
-		{
-			get { return m_strContentType; }
-			set
-			{
-				if(value == null) throw new ArgumentNullException("value");
-				m_strContentType = value;
-			}
-		}
+        public override string ContentType
+        {
+            get { return m_strContentType; }
+            set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+                m_strContentType = value;
+            }
+        }
 
-		private ICredentials m_cred = null;
-		public override ICredentials Credentials
-		{
-			get { return m_cred; }
-			set { m_cred = value; }
-		}
+        private ICredentials m_cred = null;
+        public override ICredentials Credentials
+        {
+            get { return m_cred; }
+            set { m_cred = value; }
+        }
 
-		private bool m_bPreAuth = true;
+        private bool m_bPreAuth = true;
 
-		public override bool PreAuthenticate
-		{
-			get { return m_bPreAuth; }
-			set { m_bPreAuth = value; }
-		}
+        public override bool PreAuthenticate
+        {
+            get { return m_bPreAuth; }
+            set { m_bPreAuth = value; }
+        }
 
-		private IWebProxy m_prx = null;
+        private IWebProxy m_prx = null;
 
-		public override IWebProxy Proxy
-		{
-			get { return m_prx; }
-			set { m_prx = value; }
-		}
+        public override IWebProxy Proxy
+        {
+            get { return m_prx; }
+            set { m_prx = value; }
+        }
 
-		private IocProperties m_props = new IocProperties();
+        private IocProperties m_props = new IocProperties();
 
-		public IocProperties IOConnectionProperties
-		{
-			get { return m_props; }
-			set
-			{
-				if(value == null) { Debug.Assert(false); return; }
-				m_props = value;
-			}
-		}
+        public IocProperties IOConnectionProperties
+        {
+            get { return m_props; }
+            set
+            {
+                if (value == null) { Debug.Assert(false); return; }
+                m_props = value;
+            }
+        }
 
-		public SftpWebRequest(Uri uri)
-		{
-			if(uri == null) throw new ArgumentNullException("uri");
-			m_uri = uri;
-		}
+        public SftpWebRequest(Uri uri)
+        {
+            if (uri == null) throw new ArgumentNullException("uri");
+            m_uri = uri;
+        }
 
-		public override Stream GetRequestStream()
-		{
+        public override Stream GetRequestStream()
+        {
             m_reqBody.Clear();
             return new CopyMemoryStream(m_reqBody);
-		}
-        
+        }
+
         public override WebResponse GetResponse()
         {
             NetworkCredential cred = (m_cred as NetworkCredential);
@@ -130,7 +133,7 @@ namespace SftpSync
             int l_port = m_uri.Port == -1 ? 22 : m_uri.Port;
 
             Uri uriTo = null;
-            
+
             if (m_strMethod == KeePassLib.Serialization.IOConnection.WrmMoveFile) uriTo = new Uri(m_whcHeaders.Get(
                         IOConnection.WrhMoveFileTo));
 
@@ -139,18 +142,43 @@ namespace SftpSync
 
             ConnectionInfo n_con_info;
 
-            if (m_props.Get("SSHKey") != null)
+            if (File.Exists(m_props.Get("SSHKey")))
+            {
+                using (FileStream keyStream = new FileStream(m_props.Get("SSHKey"), FileMode.Open))
+                {
+                    PrivateKeyFile v_keyauth;
+
+                    if (strPassword == null)
+                        v_keyauth = new PrivateKeyFile(keyStream);
+                    else
+                        v_keyauth = new PrivateKeyFile(keyStream, strPassword);
+
+                    n_con_info = new PrivateKeyConnectionInfo(m_uri.Host, l_port, strUser, v_keyauth);
+                }
+
+            }
+            else if (!String.IsNullOrWhiteSpace(m_props.Get("SSHKey")))
             {
                 string keyString = m_props.Get("SSHKey").Replace("\\n", "\n");
-                MemoryStream keyStream = new MemoryStream(Encoding.ASCII.GetBytes(keyString));
-                PrivateKeyFile v_keyauth;
+                using (MemoryStream keyStream = new MemoryStream(Encoding.ASCII.GetBytes(keyString)))
+                {
+                    PrivateKeyFile v_keyauth;
 
-                if (strPassword == null)
-                    v_keyauth = new PrivateKeyFile(keyStream);
-                else
-                    v_keyauth = new PrivateKeyFile(keyStream, strPassword);
+                    if (strPassword == null)
+                        v_keyauth = new PrivateKeyFile(keyStream);
+                    else
+                        v_keyauth = new PrivateKeyFile(keyStream, strPassword);
 
-                n_con_info = new PrivateKeyConnectionInfo(m_uri.Host, l_port, strUser, v_keyauth);
+                    n_con_info = new PrivateKeyConnectionInfo(m_uri.Host, l_port, strUser, v_keyauth);
+                }
+            }
+            else if (String.IsNullOrWhiteSpace(m_props.Get("SSHKey")) && 
+                        String.IsNullOrWhiteSpace(strPassword))
+            {
+                // No password, no keyfile, try pageant
+                PageantProtocol agent = new PageantProtocol();
+                n_con_info = new AgentConnectionInfo(m_uri.Host, l_port, strUser, agent);
+
             }
             else
             {
@@ -170,7 +198,7 @@ namespace SftpSync
             {
                 int.TryParse(m_props.Get("SSHTimeout"), out connectionTimeout);
             }
-            
+
             m_Client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, connectionTimeout);
 
             if (m_props.Get("HostKey") != null)
@@ -179,11 +207,11 @@ namespace SftpSync
                 if (v_ssh_dss_parts.Length != 16) throw new Exception("Input incorrect host fingerprint. Check it. Must look like: 12:34:56:78:90:ab:cd:ef:12:34:56:78:90:ab:cd:ef");
                 List<byte> v_ssh_dss_parts_b = new List<byte>();
                 foreach (string str in v_ssh_dss_parts)
-                    {
+                {
                     try
                     {
                         v_ssh_dss_parts_b.Add(byte.Parse(str, System.Globalization.NumberStyles.AllowHexSpecifier));
-                    } 
+                    }
                     catch (Exception)
                     {
                         throw new Exception("Input incorrect host fingerprint. Check it. Must look like: 12:34:56:78:90:ab:cd:ef:12:34:56:78:90:ab:cd:ef");
@@ -194,7 +222,7 @@ namespace SftpSync
                 m_Client.HostKeyReceived += M_Client_HostKeyReceived;
 
             }
-            
+
             return new SftpWebResponse(m_Client, m_strMethod, m_uri, uriTo, reqStream);
         }
 
@@ -211,7 +239,7 @@ namespace SftpSync
 
         private void M_Client_HostKeyReceived(object sender, Renci.SshNet.Common.HostKeyEventArgs e)
         {
-            e.CanTrust = e.FingerPrint.SequenceEqual(m_fingerprint) ?true: false;
+            e.CanTrust = e.FingerPrint.SequenceEqual(m_fingerprint) ? true : false;
         }
     }
 }
