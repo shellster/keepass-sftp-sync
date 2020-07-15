@@ -25,13 +25,20 @@ If your key is password protected, you should place the key password in the norm
 
 Not all SSH Private Key files may be supported.  A list of known working types can be found here: https://github.com/sshnet/SSH.NET/tree/546e2b9ece47f1982811a0bcdafa93fec7c5d0e3/src/Renci.SshNet.Tests/Data
 
+SSH Pageant Support
+-------------------
+
+If you are using Windows (Currently only Windows is supported), this plugin suppports Pageant (as of version 2.3). The plugin will automatically attempt to use Pageant if a SFTP url is entered, and no SSH key or password is specified.
+
 Change Log
 --------------
+14.07.2020      2.3: Updated SSH.NET verion.  Added Pageant Support for Windows (Thanks to @kins-dev)
+
 28.05.2020	2.2: Added SSH Private Key Support.
 
 16.05.2020	2.1: Added configurable SSH connection timeout under advanced options, added update checking capabilities.
 
-14.05.2020: 2.0: Fixed some spelling errors, updated SSHNet Lib version, added extended timeout for connections.
+14.05.2020:     2.0: Fixed some spelling errors, updated SSHNet Lib version, added extended timeout for connections.
 
 24.12.2016:	1.0: Support sftp protocol, for sync keepass db
 
