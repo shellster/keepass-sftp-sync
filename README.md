@@ -32,7 +32,7 @@ If you are using Windows (Currently only Windows is supported), this plugin supp
 
 Change Log
 --------------
-14.07.2020      2.3: Updated SSH.NET verion.  Added Pageant Support for Windows (Thanks to kins-dev)
+14.07.2020      2.3: Updated SSH.NET verion.  Added Pageant Support for Windows (Thanks to @kins-dev)
 
 28.05.2020	2.2: Added SSH Private Key Support.
 
