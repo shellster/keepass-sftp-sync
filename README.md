@@ -16,7 +16,6 @@ SSH Private Key Support
 As of verion 2.2, this plugin supports authentication via SSH Private Key. There are some pitfalls with this authentication method. Please read this section carefully.
 
 The SSHNet library (the SSH library this plugin uses) only supports an older SSH Private Key format.  If you use ssh-keygen to create your key IT MOST LIKELY WILL NOT WORK directly.
-This may be fixed as of 2.3 and the update of SSH.NET, so test first before following the rest of the directions in this section.
 
 To convert your key to a format that this plugin can use, load your private key into PuttyGen (https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html), then click `Conversions -> Export OpenSSH key`.
 
@@ -26,9 +25,14 @@ If your key is password protected, you should place the key password in the norm
 
 Not all SSH Private Key files may be supported.  A list of known working types can be found here: https://github.com/sshnet/SSH.NET/tree/546e2b9ece47f1982811a0bcdafa93fec7c5d0e3/src/Renci.SshNet.Tests/Data
 
+SSH Pageant Support
+-------------------
+
+If you are using Windows (Currently only Windows is supported), this plugin suppports Pageant (as of version 2.3). The plugin will automatically attempt to use Pageant if a SFTP url is entered, and no SSH key or password is specified.
+
 Change Log
 --------------
-14.07.2020      2.3: Updated SSH.NET verion.  Added Pagent Support (Thanks to kins-dev)
+14.07.2020      2.3: Updated SSH.NET verion.  Added Pageant Support for Windows (Thanks to kins-dev)
 
 28.05.2020	2.2: Added SSH Private Key Support.
 
