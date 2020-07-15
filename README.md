@@ -16,6 +16,7 @@ SSH Private Key Support
 As of verion 2.2, this plugin supports authentication via SSH Private Key. There are some pitfalls with this authentication method. Please read this section carefully.
 
 The SSHNet library (the SSH library this plugin uses) only supports an older SSH Private Key format.  If you use ssh-keygen to create your key IT MOST LIKELY WILL NOT WORK directly.
+This may be fixed as of 2.3 and the update of SSH.NET, so test first before following the rest of the directions in this section.
 
 To convert your key to a format that this plugin can use, load your private key into PuttyGen (https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html), then click `Conversions -> Export OpenSSH key`.
 
@@ -27,11 +28,13 @@ Not all SSH Private Key files may be supported.  A list of known working types c
 
 Change Log
 --------------
+14.07.2020      2.3: Updated SSH.NET verion.  Added Pagent Support (Thanks to kins-dev)
+
 28.05.2020	2.2: Added SSH Private Key Support.
 
 16.05.2020	2.1: Added configurable SSH connection timeout under advanced options, added update checking capabilities.
 
-14.05.2020: 2.0: Fixed some spelling errors, updated SSHNet Lib version, added extended timeout for connections.
+14.05.2020:     2.0: Fixed some spelling errors, updated SSHNet Lib version, added extended timeout for connections.
 
 24.12.2016:	1.0: Support sftp protocol, for sync keepass db
 
