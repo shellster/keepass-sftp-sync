@@ -32,14 +32,16 @@ If you are using Windows (Currently only Windows is supported), this plugin supp
 
 Change Log
 --------------
-14.07.2020      2.3: Updated SSH.NET verion.  Added Pageant Support for Windows (Thanks to @kins-dev)
+27.09.2020  2.4: Explicitly close SSH session to prevent session hangs. 
+
+14.07.2020  2.3: Updated SSH.NET verion.  Added Pageant Support for Windows (Thanks to @kins-dev)
 
 28.05.2020	2.2: Added SSH Private Key Support.
 
-16.05.2020	2.1: Added configurable SSH connection timeout under advanced options, added update checking capabilities.
+16.05.2020  2.1: Added configurable SSH connection timeout under advanced options, added update checking capabilities.
 
-14.05.2020:     2.0: Fixed some spelling errors, updated SSHNet Lib version, added extended timeout for connections.
+14.05.2020  2.0: Fixed some spelling errors, updated SSHNet Lib version, added extended timeout for connections.
 
-24.12.2016:	1.0: Support sftp protocol, for sync keepass db
+27.12.2016  1.1: Add support scp, add keyboard authenticate, add check host key
 
-27.12.2016: 1.1: Add support scp, add keyboard authenticate, add check host key
+24.12.2016  1.0: Support sftp protocol, for sync keepass db
