@@ -57,6 +57,7 @@ namespace SftpSync
             m_uriMoveTo = uriMoveTo;
             m_whc.Add("ServerInfo", m_sftpClient.ConnectionInfo.ServerVersion.ToString());
             m_sResponse = doAction();
+            m_sftpClient.Disconnect();
 
         }
 
