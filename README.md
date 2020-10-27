@@ -32,6 +32,8 @@ If you are using Windows (Currently only Windows is supported), this plugin supp
 
 Change Log
 --------------
+26.10.2020  2.4.1: Minor Update to fix previous version bump mistake (This should stop you from getting alerts to update.)
+
 27.09.2020  2.4: Explicitly close SSH session to prevent session hangs. 
 
 14.07.2020  2.3: Updated SSH.NET verion.  Added Pageant Support for Windows (Thanks to @kins-dev)
