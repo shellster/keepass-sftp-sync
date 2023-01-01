@@ -66,10 +66,12 @@
     </Reference>
     <Reference Include="Microsoft.CSharp">
     </Reference>
-    <Reference Include="Renci.SshNet, Version=2016.0.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+    <Reference Include="PageantPlugin">
+      <HintPath>libs\PageantPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="Renci.SshNet, Version=2020.0.1.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Renci.SshNet.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>libs\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -80,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CopyMemoryStream.cs" />
-    <Compile Include="ScpWebResponse.cs" />
     <Compile Include="SftpSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SftpWebRequest.cs" />

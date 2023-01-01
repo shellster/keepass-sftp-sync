@@ -7,7 +7,7 @@ using KeePassLib.Serialization;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Renci.SshNet.Common;
-using Renci.SshNet.Pageant;
+using PageantPlugin;
 using System.Text;
 
 namespace SftpSync
@@ -172,7 +172,7 @@ namespace SftpSync
                     n_con_info = new PrivateKeyConnectionInfo(m_uri.Host, l_port, strUser, v_keyauth);
                 }
             }
-            else if (String.IsNullOrWhiteSpace(m_props.Get("SSHKey")) && 
+            else if (String.IsNullOrWhiteSpace(m_props.Get("SSHKey")) &&
                         String.IsNullOrWhiteSpace(strPassword))
             {
                 // No password, no keyfile, try pageant
@@ -188,7 +188,6 @@ namespace SftpSync
                 PasswordAuthenticationMethod v_pauth = new PasswordAuthenticationMethod(strUser, strPassword);
                 n_con_info = new ConnectionInfo(m_uri.Host, l_port, strUser, v_pauth, v_kauth);
             }
-
             m_Client = new SftpClient(n_con_info);
 
             //Set timeout to reasonable setting of 30 seconds for default.

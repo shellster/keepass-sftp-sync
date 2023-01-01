@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle ("SftpSync")]
-[assembly: AssemblyDescription("Sync DB file via sftp/scp")]
+[assembly: AssemblyDescription("Sync DB file via sftp")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany("shellster")]
 [assembly: AssemblyProduct ("KeePass Plugin")]
-[assembly: AssemblyCopyright ("Copyright 2020")]
+[assembly: AssemblyCopyright ("Copyright 2023")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 // This sets the default COM visibility of types in the assembly to invisible.
@@ -25,8 +25,8 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can use the default the Revision and 
 // Build Numbers by using the '*' as shown below:
-[assembly: AssemblyVersion("2.4.1")]
+[assembly: AssemblyVersion("2.4.2")]
 [assembly: Guid ("363be07e-f6fb-49c5-af78-85405bd9c3f3")]
 [assembly: NeutralResourcesLanguage ("en")]
-[assembly: AssemblyFileVersion("2.4.1")]
+[assembly: AssemblyFileVersion("2.4.2")]
 

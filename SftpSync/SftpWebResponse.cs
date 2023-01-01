@@ -2,6 +2,7 @@
 using Renci.SshNet;
 using System.Net;
 using System.IO;
+using System.Linq;
 
 namespace SftpSync
 {
@@ -52,7 +53,16 @@ namespace SftpSync
             m_uriResponse = uriResponse;
             m_method = p_method;
             m_sftpClient = p_sftpcl;
+
+            try { using (var ecdsa = new System.Security.Cryptography.ECDsaCng()) ; }
+            catch (NotImplementedException)
+            {
+                var algsToRemove = m_sftpClient.ConnectionInfo.HostKeyAlgorithms.Keys.Where(algName => algName.StartsWith("ecdsa")).ToArray();
+                foreach (var algName in algsToRemove) m_sftpClient.ConnectionInfo.HostKeyAlgorithms.Remove(algName);
+            }
+
             if (!m_sftpClient.IsConnected) m_sftpClient.Connect();
+
             m_sReqStream = p_InStream;
             m_uriMoveTo = uriMoveTo;
             m_whc.Add("ServerInfo", m_sftpClient.ConnectionInfo.ServerVersion.ToString());
@@ -67,37 +77,23 @@ namespace SftpSync
 
             if (m_method == KeePassLib.Serialization.IOConnection.WrmDeleteFile)
             {
-                if (m_sftpClient.GetType() == typeof(ScpClient)) throw new Exception("SCP not support method DELETE");
-
                 if (((SftpClient)m_sftpClient).Exists(m_uriResponse.LocalPath)) ((SftpClient)m_sftpClient).DeleteFile(m_uriResponse.LocalPath);
             }
             else if (m_method == KeePassLib.Serialization.IOConnection.WrmMoveFile)
             {
-                if (m_sftpClient.GetType() == typeof(ScpClient)) throw new Exception("SCP not support method MoveTo");
                 if (m_uriMoveTo == null) throw new ArgumentNullException("uriMoveTo");
                 ((SftpClient)m_sftpClient).RenameFile(m_uriResponse.LocalPath, m_uriMoveTo.LocalPath);
             }
             else if (m_sReqStream == null && m_method != "POST")
             {
-                if (m_sftpClient.GetType() == typeof(SftpClient))
-                    ((SftpClient)m_sftpClient).DownloadFile(m_uriResponse.LocalPath, m_sResponse);                
-                else                
-                    ((ScpClient)m_sftpClient).Download(m_uriResponse.LocalPath, m_sResponse);
-
-                
+                ((SftpClient)m_sftpClient).DownloadFile(m_uriResponse.LocalPath, m_sResponse);
                 m_lSize = m_sResponse.Length;
-
-
             }
             else if (m_method == "POST")
             {
                 if (m_sReqStream == null) throw new ArgumentNullException("m_sReqStream");
                 m_lSize = 0;
-                if (m_sftpClient.GetType() == typeof(SftpClient))
-                    ((SftpClient)m_sftpClient).UploadFile(m_sReqStream, m_uriResponse.LocalPath);
-                else
-                    ((ScpClient)m_sftpClient).Upload(m_sReqStream, m_uriResponse.LocalPath);            
-
+                ((SftpClient)m_sftpClient).UploadFile(m_sReqStream, m_uriResponse.LocalPath);
             } else
             {
                 throw new Exception("mode not support");

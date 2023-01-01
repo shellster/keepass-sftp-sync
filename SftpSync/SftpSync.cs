@@ -1,6 +1,5 @@
 ﻿using KeePass.Plugins;
 using KeePassLib.Serialization;
-using KeePassLib;
 
 namespace SftpSync
 {
@@ -18,7 +17,6 @@ namespace SftpSync
         public override bool Initialize(IPluginHost host)
 		{
 			m_host = host;
-      
             m_sftpCr = new  SftpWebRequestCreator();
             m_sftpCr.Register();
             RegisterIocProperties();   
@@ -37,7 +35,7 @@ namespace SftpSync
 			if(m_bPropRegistered) return;
 			m_bPropRegistered = true;
 
-			string[] vScpSftp = new string[] { "SCP", "SFTP" };
+			string[] vScpSftp = new string[] { "SFTP" };
 
             IocPropertyInfoPool.Add(new IocPropertyInfo("HostKey",
                             typeof(string), "Fingerprint of expected SSH host key", vScpSftp));
