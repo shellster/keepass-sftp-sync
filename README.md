@@ -1,5 +1,3 @@
-Keepass SftpSync
-================
 
 ARCHIVED 05/20/2024:
 ====================
@@ -10,6 +8,10 @@ Another issue is that at one point we supplied Putty support, but had to drop th
 and I lack the time or interest to continue.  KeepassXC now supports KDBX v4 databases and has a built-in SSH agent.  I recommned people who want this functionality checkout that option.
 If someone wants to take this project over, I'm open to the idea of transfering this repo, but I'm leery of someone of unknown reput hijacking it.  Feel free to open an issue to discuss.
 
+
+
+Keepass SftpSync
+================
 
 This tool is based on (and primarily composed of) the work done by: Vitaly Burkut.
 The original tool's source can be found here: https://sourceforge.net/projects/keepass-sftp-sync/
